@@ -94,4 +94,30 @@ if not DEBUG:
     pip install gunicorn
 17.- Añadir gunicorn en el requirements.txt
     pip freeze > requirements.txt
+18.- Actualizar los archivos de git
+    git status
+    git add .
+    git commit -m "Proyecto listo para subir a render.com"
+19.- Crear repositorio en nuestro repositorio de GitHub
+20.- Agregar comando en terminal
+    git remote add origin git@github.com:jhonatanchavezcastillo/mecate_api.git
+
+    git push -u origin master #subir a github proyecto
+21.- Seleccionar el repo desde render.com
+    Ir a la cuenta de github para seleccinoar el repo
+
+    ir a https://dashboard.render.com/select-repo?type=web
+    y conectar con el repo.
+22.- En la interface de render agregar lo siguiente
+    Build Command: ./build.sh
+    Start Command: gunicorn projectcrud.wsgi
+    Enviroment Variable:
+        DATABASE_URL = "internal DataBase URL" # Esto lo encuentras en el panel
+
+        SECRET_KEY = "Busca una en randomkeygen.com"
+
+        PYTHON_VERSION = "Mi versión de python" #python --version
+
+
+
 
