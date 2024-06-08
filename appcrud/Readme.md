@@ -98,6 +98,7 @@ if not DEBUG:
     git status
     git add .
     git commit -m "Proyecto listo para subir a render.com"
+    git push origin master
 19.- Crear repositorio en nuestro repositorio de GitHub
 20.- Agregar comando en terminal
     git remote add origin git@github.com:jhonatanchavezcastillo/mecate_api.git
