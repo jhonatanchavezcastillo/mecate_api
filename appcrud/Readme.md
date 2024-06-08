@@ -81,7 +81,7 @@ Fuente: https://www.youtube.com/watch?v=GE0Q8YNKNgs&t=2s
     #Agregar en MIDDLEWARE 
      'whitenoise.middleware.WhiteNoiseMiddleware',
 12.- Agregar en project/setting.py para crear carpeta con archivos estáticos
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -118,7 +118,7 @@ if not DEBUG:
         SECRET_KEY = "Busca una en randomkeygen.com"
 
         PYTHON_VERSION = "Mi versión de python" #python --version
-
+23.- URL DEL SERVIDOR: https://mecate-api.onrender.com/
 
 
 
