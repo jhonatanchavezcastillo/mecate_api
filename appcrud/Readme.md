@@ -39,3 +39,59 @@ Fuente: https://www.youtube.com/watch?v=GE0Q8YNKNgs&t=2s
 	Abrir el archivo projectcrud/appcrud.py e importar las rutas
 
 #Subir a repositorio de Git
+1.- Crear en raíz el archivo .gitignore para seleccionar los archivos que no se van a subir al repo.
+2.- git add . 
+3.- git commit -m "first commit"
+4.- Subir al repositorio en GitHub
+
+#Desplegar proyecto en servidor de render.com
+#Fuente https://docs.render.com/deploy-django
+1.- Crea una cuenta en render.com
+2.- Importa la librería os de python en projectcrud/setting.py
+    #from pathlib import Path
+    import os
+3.- Actualizar SECRET_KEY en project/setting.py
+    SECRET_KEY = os.environ.get('SECRET_KEY', default='Your secret key')
+4.- Actualizar DEBUG en project/setting.py para que no arroje información en producción
+    DEBUG = 'RENDER' not in os.environ
+5.- Actualizar Allow_host en project/setting.py
+    RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+6.- Generar base de datos en render.com (PostgreSQL)
+7.- Instalar dos módulos para base de datos
+    pip install dj-database-url psycopg2-binary
+
+    - #dj-database-url Comprueba si existe una variable de entorno llamada DATABASE, si existe lo asigna a nuesta base de datos.
+
+    -#psycopg2-binary Módulo para conectarnos a PostgresSql
+8.- Importar dj_database_url en project/setting.py
+    import dj_database_url
+9.- Actualizar en project/setting.py
+    DATABASES = {
+        'default': dj_database_url.config(
+            # Replace this value with your local database's connection string.
+            default='postgresql://postgres:postgres@localhost:5432/mysite',
+            conn_max_age=600
+        )
+    }
+10.- En este paso, configuraremos WhiteNoise para que proporcione estos activos estáticos desde el servidor web de Render.
+    pip install whitenoise[brotli]
+11.- Añade el módulo whitenoise en project/setting.py
+    #Agregar en MIDDLEWARE 
+     'whitenoise.middleware.WhiteNoiseMiddleware',
+12.- Agregar en project/setting.py para crear carpeta con archivos estáticos
+STATIC_URL = '/static/'
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+13.- Crear en raíz un build.sh con todos los comandos de ejecución instalación del proyecto.
+14.- Genera un archivo requirements.txt con todos los módulos que usamos 
+    pip freeze > requirements.txt
+15.- Otorgar permisos de ejecución a build.sh desde terminal git bash
+    chmod a+x build.sh
+16.- Instalar módulo gunicorn para poder mostrar contenido estático como imágenes, css.
+    pip install gunicorn
+17.- Añadir gunicorn en el requirements.txt
+    pip freeze > requirements.txt
+
