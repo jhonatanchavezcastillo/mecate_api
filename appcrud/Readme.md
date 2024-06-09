@@ -121,4 +121,9 @@ if not DEBUG:
 23.- URL DEL SERVIDOR: https://mecate-api.onrender.com/
 
 
+#Consumir servicios externos
+1.- Crear un archivo appcrud/services.py y agregar la función para consumo externo
+2.- Crea un archivo appcrud/views.py para importar la función de services.py
+3.- Agregar la url en archivo appcrud/urls.py
+
 

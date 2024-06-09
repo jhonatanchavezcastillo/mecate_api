@@ -10,7 +10,8 @@ class AerolineasSerializer(serializers.ModelSerializer):
 class AeropuertosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aeropuertos
-        fields = ('id_aeropuerto','nombre_aeropuerto','create_at')
+        #fields = ('id_aeropuerto','nombre_aeropuerto','create_at')
+        fields = '__all__' 
         read_only_fields = ('create_at', ) # definir campos de solo lectura
 
 class MovimientosSerializer(serializers.ModelSerializer):
@@ -22,7 +23,6 @@ class MovimientosSerializer(serializers.ModelSerializer):
 class VuelosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vuelos
-        fields = ('id_vuelo','id_aerolinea','id_aeropuerto','id_movimiento','dia','create_at')
+        #fields = ('id_vuelo','id_aerolinea','id_aeropuerto','id_movimiento','dia','create_at')
+        fields = '__all__' 
         read_only_fields = ('create_at', ) # definir campos de solo lectura
-
- 
