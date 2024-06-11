@@ -129,3 +129,4 @@ if not DEBUG:
 #Habilitar peticiones "Corse"
 pip install django-cors-headers
 
+.
