@@ -4,6 +4,7 @@ from rest_framework import status
 import requests
 from .services import get_stackexchange
 from django.db.models import Count
+from django.http import JsonResponse
 from .models import Vuelos, Aeropuertos, Aerolineas
 from .serializers import AerolineasSerializer
 
@@ -16,10 +17,6 @@ class ExternalDataView(APIView):
 
         if data_url is None:
             return Response({"error": "Error al obtener datos externos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Filtrar los datos si es necesario
-        #filtered_data = self.filter_data(data_url)
-        #return Response(filtered_data, status=status.HTTP_200_OK)
 
         return Response(data_url, status=status.HTTP_200_OK)
 
@@ -36,10 +33,10 @@ class TotalAnsweredView(APIView):
         data_url = get_stackexchange(url)
 
         if data_url is None:
-            return Response({"error": "Error al obtener datos externos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": "Error al obtener datos externos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         filtered_data = self.filter_data(data_url)
-        return Response(filtered_data, status=status.HTTP_200_OK)
+        return JsonResponse(filtered_data, status=status.HTTP_200_OK)
 
     def filter_data(self, data):
         #Obtener el número de respuestas contestadas 
@@ -66,10 +63,10 @@ class MaxReputationView(APIView):
         data_url = get_stackexchange(url)
 
         if data_url is None:
-            return Response({"error": "Error al obtener datos externos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": "Error al obtener datos externos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         filtered_data = self.filter_data(data_url)
-        return Response(filtered_data, status=status.HTTP_200_OK)
+        return JsonResponse(filtered_data, status=status.HTTP_200_OK)
 
     def filter_data(self, data):
        max_reputation = max(data['items'], key=lambda x: x['owner']['reputation'])
@@ -83,10 +80,10 @@ class MinViewCountView(APIView):
         data_url = get_stackexchange(url)
 
         if data_url is None:
-            return Response({"error": "Error al obtener datos externos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": "Error al obtener datos externos"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         filtered_data = self.filter_data(data_url)
-        return Response(filtered_data, status=status.HTTP_200_OK)
+        return JsonResponse(filtered_data, status=status.HTTP_200_OK)
 
     def filter_data(self, data):
        min_view = min(data['items'], key=lambda x: x['view_count'])
@@ -139,9 +136,9 @@ class VuelosConAeropuertosView(APIView):
                 'vuelos_count': most_common_aeropuerto['aeropuerto_count'],
                 'nombre_aeropuerto': name_aeropuerto['nombre_aeropuerto'],
             }
-            return Response(result)
+            return JsonResponse(result)
         else:
-            return Response({"error": "No hay vuelos en la base de datos."}, status=404)
+            return JsonResponse({"error": "No hay vuelos en la base de datos."}, status=404)
 
 #2\. ¿Cuál es el nombre aerolínea que ha realizado mayor número de
 #vuelos durante el año?
@@ -167,9 +164,9 @@ class AerolineaMasVuelosView(APIView):
                 'vuelos_count': most_common_aerolinea['aerolinea_count'],
                 'nombre_aerolinea': name_aerolinea['nombre_aerolinea'],
             }
-            return Response(result)
+            return JsonResponse(result)
         else:
-            return Response({"error": "No hay vuelos en la base de datos."}, status=404)
+            return JsonResponse({"error": "No hay vuelos en la base de datos."}, status=404)
 
 #3\. ¿En qué día se ha tenido mayor número de vuelos?
 class DiasConMayorVuelosView(APIView):
@@ -186,9 +183,9 @@ class DiasConMayorVuelosView(APIView):
             result = {
                 'dia_mayor_vuelos': most_common_vuelos['dia'],
             }
-            return Response(result)
+            return JsonResponse(result)
         else:
-            return Response({"error": "No hay vuelos en la base de datos."}, status=404)
+            return JsonResponse({"error": "No hay vuelos en la base de datos."}, status=404)
 
 #4\. 4\. ¿Cuáles son las aerolíneas que tienen mas de 2 vuelos por día?
 class MasDeDosVuelosPorDiaView(APIView):
@@ -212,5 +209,7 @@ class MasDeDosVuelosPorDiaView(APIView):
         # Filtrar los vuelos
         aerolineas = Aerolineas.objects.filter(id_aerolinea__in=aerolinea_ids)
         serializer = AerolineasSerializer(aerolineas, many=True)
-
-        return Response(serializer.data)
+        result = {
+                'aerolineas': serializer.data,
+        }
+        return JsonResponse(result)

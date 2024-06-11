@@ -126,4 +126,6 @@ if not DEBUG:
 2.- Crea un archivo appcrud/views.py para importar la función de services.py
 3.- Agregar la url en archivo appcrud/urls.py
 
+#Habilitar peticiones "Corse"
+pip install django-cors-headers
 
